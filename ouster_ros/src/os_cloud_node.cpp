@@ -31,9 +31,9 @@ int main(int argc, char** argv) {
 
     auto tf_prefix = nh.param("tf_prefix", std::string{});
     if (!tf_prefix.empty() && tf_prefix.back() != '/') tf_prefix.append("/");
-    auto sensor_frame = tf_prefix + "os_sensor";
-    auto imu_frame = tf_prefix + "os_imu";
-    auto lidar_frame = tf_prefix + "os_lidar";
+    auto sensor_frame = tf_prefix + "os1_sensor";
+    auto imu_frame = tf_prefix + "os1_imu";
+    auto lidar_frame = tf_prefix + "os1_lidar";
 
     ouster_ros::OSConfigSrv cfg{};
     auto client = nh.serviceClient<ouster_ros::OSConfigSrv>("os_config");
@@ -85,7 +85,7 @@ int main(int argc, char** argv) {
                 for (int i = 0; i < n_returns; i++) {
                     scan_to_cloud(xyz_lut, h->timestamp, ls, cloud, i);
                     lidar_pubs[i].publish(ouster_ros::cloud_to_cloud_msg(
-                        cloud, h->timestamp, sensor_frame));
+                        cloud, std::chrono::nanoseconds(ros::Time::now().toNSec()), sensor_frame));
                 }
             }
         }
