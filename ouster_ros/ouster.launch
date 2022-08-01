@@ -12,6 +12,7 @@
   <arg name="rviz_config" default="-d $(find ouster_ros)/viz.rviz" doc="optional rviz config file"/>
   <arg name="tf_prefix" default="" doc="namespace for tf transforms"/>
   <arg name="udp_profile_lidar" default="" doc="lidar packet profile: LEGACY, RNG19_RFL8_SIG16_NIR16_DUAL"/>
+  <arg name="imu_topic" default="/os1_cloud_node/imu" />
 
   <node pkg="ouster_ros" name="os_node" type="os_node" output="screen" required="true">
     <param name="~/lidar_mode" type="string" value="$(arg lidar_mode)"/>
@@ -30,7 +31,7 @@
     <remap from="~/lidar_packets" to="/os_node/lidar_packets"/>
     <remap from="~/imu_packets" to="/os_node/imu_packets"/>
     <remap from="~/points" to="/os1_cloud_node/points"/>
-    <remap from="~/imu" to="/os1_cloud_node/imu"/>
+    <remap from="~/imu" to="$(arg imu_topic)"/>
     <param name="~/tf_prefix" value="$(arg tf_prefix)"/>
   </node>
 
